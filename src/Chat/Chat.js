@@ -44,7 +44,7 @@ class Chat extends React.Component {
     }
 
     onDeleteClick = (key) => {
-        
+
         // fetch(
         //     'https://ad-snadbox.firebaseio.com/JFDDL7/messages/' + key + '.json',
         //     {
@@ -58,6 +58,8 @@ class Chat extends React.Component {
 
         messageRef.child(key).remove()
     }
+
+    componentWillUnmount = () => messageRef.off() 
 
     render() {
         return (
