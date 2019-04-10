@@ -3,7 +3,7 @@ import { database } from './firebaseConfig'
 
 const courseRef = database.ref('/JFDDL7')
 
-courseRef.once(
+courseRef.on(                                   //nie można wywołać na on then (to nie jest promise), once tak
     'value',
     snapshot => console.log(snapshot.val())
     )
