@@ -5,6 +5,8 @@ import 'moment/locale/pl'
 
 moment.locale('pl')
 
+const messageRef = database.ref('/JFDDL7/messages')
+
 class Chat extends React.Component {
     state = {
         messages: null,
@@ -12,13 +14,12 @@ class Chat extends React.Component {
     }
 
     componentDidMount() {
-        database.ref('/JFDDL7/messages')
-            .on(
-                'value',
-                (snapshot) => {
-                    this.setState({ messages: snapshot.val() })
-                }
-            )
+        messageRef.on(
+            'value',
+            (snapshot) => {
+                this.setState({ messages: snapshot.val() })
+            }
+        )
     }
 
     onNewMessageTextChange = (event) => this.setState({ newMessageText: event.target.value })
@@ -38,9 +39,24 @@ class Chat extends React.Component {
         //     }
         // )
 
-        database.ref('/JFDDL7/messages')
-            .push(newMessage)
+        messageRef.push(newMessage)
 
+    }
+
+    onDeleteClick = (key) => {
+        
+        // fetch(
+        //     'https://ad-snadbox.firebaseio.com/JFDDL7/messages/' + key + '.json',
+        //     {
+        //         method: 'DELETE'
+        //     }
+        // )
+
+        // database.ref('/JFDDL7/messages/' + key).remove()
+
+        // database.ref('/JFDDL7/messages/' + key).set(null)
+
+        messageRef.child(key).remove()
     }
 
     render() {
@@ -65,6 +81,11 @@ class Chat extends React.Component {
                                 <p><b>{message.author}</b></p>
                                 <p>{moment(message.date).fromNow()}</p>
                                 <p>{message.text}</p>
+                                <button
+                                    onClick={() => this.onDeleteClick(key)}
+                                >
+                                    USUŃ
+                                </button>
                             </div>
                         )
                     )
